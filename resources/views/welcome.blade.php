@@ -1,114 +1,131 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- 🌟 HERO --}}
-<section class="relative py-12 md:py-20 bg-gradient-to-br from-primary/5 via-background to-background overflow-hidden" data-aos="fade-in">
-    <div class="container mx-auto px-4 text-center max-w-4xl">
-        <span class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wide text-primary bg-primary/10 rounded-full" data-aos="fade-up" data-aos-delay="100">✨ Nouvelle collection disponible</span>
-        <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold text-secondary leading-tight mb-4" data-aos="fade-up" data-aos-delay="200">
-            L'élégance au quotidien, <span class="text-primary">livrée chez vous</span>
-        </h1>
-        <p class="text-sm md:text-base text-secondary/70 mb-8 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="300">
-            Découvrez une sélection rigoureuse de produits alliant qualité, design et prix accessibles. Livraison rapide & retour gratuit.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-3 justify-center" data-aos="fade-up" data-aos-delay="400">
-            <a href="{{ url('/produits') }}" class="btn-primary px-6 py-2.5 text-sm">Découvrir la boutique</a>
-            <a href="#categories" class="px-6 py-2.5 text-sm font-medium text-secondary bg-card border border-border rounded-btn hover:border-primary/30 transition shadow-sm">Explorer les catégories</a>
-        </div>
-    </div>
-</section>
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-950 dark:to-slate-900 transition-colors duration-300">
 
-{{-- 🛡️ TRUST BADGES --}}
-<section class="py-6 md:py-8 bg-card border-y border-border" data-aos="fade-up">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            @foreach([
-                ['icon' => '🚚', 'title' => 'Livraison gratuite', 'desc' => 'Dès 49€ d\'achat'],
-                ['icon' => '🔒', 'title' => 'Paiement sécurisé', 'desc' => 'Cryptage SSL 256-bit'],
-                ['icon' => '↩️', 'title' => 'Retours simples', 'desc' => '30 jours pour changer'],
-                ['icon' => '💬', 'title' => 'Support réactif', 'desc' => 'Réponse sous 24h']
-            ] as $f)
-            <div class="text-center p-2">
-                <div class="text-xl md:text-2xl mb-1">{{ $f['icon'] }}</div>
-                <h3 class="text-sm font-semibold text-secondary">{{ $f['title'] }}</h3>
-                <p class="text-xs text-secondary/60 mt-0.5">{{ $f['desc'] }}</p>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-{{-- 📂 CATÉGORIES --}}
-<section id="categories" class="py-10 md:py-14" data-aos="fade-up">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-8">
-            <h2 class="text-xl md:text-2xl font-bold text-secondary mb-1">Nos Catégories</h2>
-            <p class="text-sm text-secondary/60">Trouvez exactement ce qu'il vous faut</p>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            @foreach(['Électronique', 'Mode', 'Maison', 'Sport', 'Beauté', 'Enfants'] as $cat)
-            <a href="{{ url('/produits?category=' . Str::slug($cat)) }}" class="card p-4 text-center hover:border-primary/30 transition group" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 50 }}">
-                <div class="w-10 h-10 md:w-12 md:h-12 mx-auto mb-2 md:mb-3 rounded-full bg-primary/10 flex items-center justify-center text-lg md:text-xl group-hover:scale-110 transition-transform">
-                    {{ ['⚡','👗','🏠','🏃','✨','🧸'][$loop->index] }}
-                </div>
-                <h3 class="text-xs md:text-sm font-medium text-secondary group-hover:text-primary transition">{{ $cat }}</h3>
-            </a>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-{{-- 🛍️ PRODUITS POPULAIRES --}}
-<section class="py-10 md:py-14 bg-background/50" data-aos="fade-up">
-    <div class="container mx-auto px-4">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 gap-4">
-            <div>
-                <h2 class="text-xl md:text-2xl font-bold text-secondary mb-1">Produits Populaires</h2>
-                <p class="text-sm text-secondary/60">Les coups de cœur de nos clients</p>
-            </div>
-            <a href="{{ url('/produits') }}" class="text-sm font-medium text-primary hover:underline flex items-center gap-1">
-                Voir tout <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </a>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-            @for($i = 1; $i <= 5; $i++)
-            <div class="card hover-lift" data-aos="fade-up" data-aos-delay="{{ $i * 100 }}">
-                <div class="relative aspect-square overflow-hidden rounded-t-card bg-gray-100">
-                    <img src="https://placehold.co/400x400/e2e8f0/1e293b?text=Produit+{{ $i }}" alt="Produit {{ $i }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                    @if($i % 2 == 0)
-                    <span class="absolute top-2 left-2 bg-accent/90 text-white text-xs font-semibold px-2 py-0.5 rounded shadow">Promo</span>
-                    @endif
-                </div>
-                <div class="p-3 md:p-4">
-                    <span class="text-xs text-secondary/50 uppercase tracking-wide">Catégorie</span>
-                    <h3 class="font-medium text-sm md:text-base text-secondary line-clamp-2 mb-1 mt-1">Nom du produit {{ $i }}</h3>
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-primary font-bold text-sm md:text-base">{{ 29 + ($i * 5) }},99 €</span>
-                        @if($i % 2 == 0)
-                        <span class="text-secondary/50 text-xs line-through">{{ 39 + ($i * 5) }},99 €</span>
-                        @endif
+    {{-- 🎯 HERO SECTION --}}
+    <section class="relative overflow-hidden">
+        {{-- Fond décoratif subtil --}}
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-amber-50/30 dark:from-blue-950/20 dark:via-transparent dark:to-amber-950/10"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-amber-400/10 dark:from-blue-600/5 dark:to-amber-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        
+        <div class="relative container mx-auto px-4 py-16 md:py-24 max-w-6xl">
+            <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                
+                {{-- Texte Hero --}}
+                <div class="flex-1 text-center lg:text-left space-y-6">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full border border-blue-200 dark:border-blue-800">
+                        ✨ Nouvelle collection disponible
+                    </span>
+                    
+                    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+                        L'élégance au quotidien,<br>
+                        <span class="text-blue-600 dark:text-blue-400">livrée chez vous</span>
+                    </h1>
+                    
+                    <p class="text-sm md:text-base text-gray-600 dark:text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+                        Découvrez une sélection rigoureuse de produits alliant qualité, design et prix accessibles. Livraison rapide & retour gratuit.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start pt-2">
+                        <a href="{{ url('/produits') }}" class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-200 flex items-center justify-center gap-2">
+                            Découvrir la boutique
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                        <a href="{{ url('/produits') }}#categories" class="w-full sm:w-auto px-6 py-2.5 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-200 text-sm font-medium rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+                            Explorer les catégories
+                        </a>
                     </div>
-                    <button @click="addToCart(999)" class="btn-primary w-full text-xs md:text-sm py-1.5 md:py-2 relative overflow-hidden">
-                        <span>Ajouter au panier</span>
-                    </button>
+                </div>
+
+                {{-- Illustration Hero --}}
+                <div class="flex-1 relative">
+                    <div class="relative w-full max-w-md mx-auto">
+                        <div class="aspect-square rounded-3xl bg-gradient-to-br from-blue-100 to-amber-50 dark:from-blue-900/20 dark:to-amber-900/20 border border-gray-200 dark:border-slate-800 shadow-2xl shadow-blue-500/10 flex items-center justify-center overflow-hidden">
+                            <div class="text-center p-8">
+                                <div class="w-24 h-24 mx-auto mb-4 bg-white dark:bg-slate-800 rounded-2xl shadow-lg flex items-center justify-center">
+                                    <svg class="w-12 h-12 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                    </svg>
+                                </div>
+                                <p class="text-gray-500 dark:text-slate-400 text-sm font-medium">Produits premium sélectionnés</p>
+                            </div>
+                        </div>
+                        
+                        {{-- Badge flottant --}}
+                        <div class="absolute -bottom-4 -left-4 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 p-3 flex items-center gap-3 animate-bounce" style="animation-duration: 3s;">
+                            <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-900 dark:text-white">Livraison gratuite</p>
+                                <p class="text-[10px] text-gray-500 dark:text-slate-400">Dès 50€ d'achat</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            @endfor
         </div>
-    </div>
-</section>
+    </section>
 
-{{-- 📩 NEWSLETTER --}}
-<section class="py-12 md:py-16 bg-primary text-white relative overflow-hidden" data-aos="fade-up">
-    <div class="container mx-auto px-4 text-center relative z-10">
-        <h2 class="text-xl md:text-2xl font-bold mb-2">Restez informé de nos nouveautés</h2>
-        <p class="text-sm text-white/80 mb-6 max-w-xl mx-auto">Inscrivez-vous à notre newsletter et recevez -10% sur votre première commande.</p>
-        <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input type="email" placeholder="votre@email.com" class="w-full px-4 py-2.5 rounded-btn text-secondary bg-white/95 focus:outline-none focus:ring-2 focus:ring-white/30 text-sm" required>
-            <button type="submit" class="bg-accent hover:bg-amber-600 text-white font-medium px-5 py-2.5 rounded-btn transition shadow text-sm whitespace-nowrap">Je m'inscris</button>
-        </form>
-        <p class="text-xs text-white/60 mt-3">Désabonnement possible à tout moment. Pas de spam.</p>
-    </div>
-</section>
+    {{-- 📦 SECTION CATÉGORIES --}}
+    <section id="categories" class="py-12 md:py-16 bg-white dark:bg-slate-900/50 border-y border-gray-100 dark:border-slate-800">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">Nos Catégories</h2>
+                <p class="text-sm text-gray-600 dark:text-slate-400">Explorez notre univers par thématique</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach(['Électronique', 'Mode', 'Maison', 'Sport'] as $cat)
+                <a href="{{ url('/produits') }}?category={{ strtolower($cat) }}" class="group p-5 bg-gray-50 dark:bg-slate-800/50 rounded-2xl border border-gray-100 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-200 text-center">
+                    <div class="w-12 h-12 mx-auto mb-3 bg-white dark:bg-slate-700 rounded-xl shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="text-xl">
+                            @if($loop->first) 💻 @elseif($loop->iteration == 2) 👕 @elseif($loop->iteration == 3) 🏠 @else ⚽ @endif
+                        </span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $cat }}</h3>
+                </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ⭐ SECTION AVANTAGES --}}
+    <section class="py-12 md:py-16">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach([
+                    ['icon' => '🚚', 'title' => 'Livraison Rapide', 'desc' => 'Expédition sous 24h, livraison en 2-3 jours'],
+                    ['icon' => '🔒', 'title' => 'Paiement Sécurisé', 'desc' => 'Transactions cryptées via Stripe'],
+                    ['icon' => '↩️', 'title' => 'Retour Gratuit', 'desc' => '30 jours pour changer d\'avis']
+                ] as $adv)
+                <div class="p-6 bg-white dark:bg-slate-800/50 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow text-center md:text-left">
+                    <div class="text-3xl mb-3">{{ $adv['icon'] }}</div>
+                    <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1">{{ $adv['title'] }}</h3>
+                    <p class="text-xs text-gray-600 dark:text-slate-400 leading-relaxed">{{ $adv['desc'] }}</p>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- 🛒 CTA SECTION --}}
+    <section class="py-12 md:py-16 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+        <div class="container mx-auto px-4 max-w-4xl text-center relative">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Prêt à commander ?</h2>
+            <p class="text-blue-100 text-sm mb-6 max-w-lg mx-auto">Rejoignez des milliers de clients satisfaits et profitez de nos offres exclusives.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a href="{{ route('register') }}" class="w-full sm:w-auto px-8 py-3 bg-white text-blue-700 font-bold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 text-sm">
+                    Créer un compte gratuit
+                </a>
+                <a href="{{ url('/produits') }}" class="w-full sm:w-auto px-8 py-3 bg-blue-700 hover:bg-blue-600 text-white font-medium rounded-xl border border-blue-500 transition-all duration-200 text-sm">
+                    Voir les produits
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
 @endsection
