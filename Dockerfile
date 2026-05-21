@@ -29,6 +29,9 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && touch storage/database.sqlite \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
+    
+# 🔥 AJOUTER CETTE LIGNE ICI : Remplir la BDD avec l'admin
+RUN php artisan db:seed --force
 
 EXPOSE 10000
 
