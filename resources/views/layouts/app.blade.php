@@ -97,12 +97,35 @@
             <button @click="mobileOpen = !mobileOpen" class="md:hidden p-2 text-amber-400 hover:text-amber-300 transition"><svg x-show="!mobileOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg><svg x-show="mobileOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
         </nav>
 
-        {{-- Mobile Menu --}}
-        <div x-show="mobileOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" x-cloak class="md:hidden bg-[#1E40AF] dark:bg-slate-900 border-t border-white/20 dark:border-slate-700 px-4 py-3 space-y-3">
-            <div class="mb-3"><input type="text" placeholder="Rechercher..." class="w-full px-4 py-2 bg-white/10 dark:bg-slate-800 border border-white/20 dark:border-slate-600 rounded-lg text-sm text-white dark:text-slate-200 placeholder-white/60 dark:placeholder-slate-400 focus:outline-none focus:border-amber-400"></div>
+            {{-- Menu Mobile --}}
+        <div x-show="mobileOpen" 
+             x-transition:enter="transition ease-out duration-200" 
+             x-transition:enter-start="opacity-0 -translate-y-2" 
+             x-transition:enter-end="opacity-100 translate-y-0" 
+             x-transition:leave="transition ease-in duration-150" 
+             x-transition:leave-start="opacity-100 translate-y-0" 
+             x-transition:leave-end="opacity-0 -translate-y-2" 
+             x-cloak 
+             class="md:hidden bg-[#1E40AF] dark:bg-slate-900 border-t border-white/20 dark:border-slate-700 px-4 py-3 space-y-3">
+            
+            <div class="mb-3">
+                <input type="text" placeholder="Rechercher..." class="w-full px-4 py-2 bg-white/10 dark:bg-slate-800 border border-white/20 dark:border-slate-600 rounded-lg text-sm text-white dark:text-slate-200 placeholder-white/60 dark:placeholder-slate-400 focus:outline-none focus:border-amber-400">
+            </div>
+
             <a href="{{ url('/produits') }}" @click="navigateTo($event, '{{ url('/produits') }}'); mobileOpen = false" class="block text-sm py-2 hover:text-amber-400 transition">Produits</a>
             <a href="{{ url('/produits') }}#categories" @click="navigateTo($event, '{{ url('/produits') }}#categories'); mobileOpen = false" class="block text-sm py-2 hover:text-amber-400 transition">Catégories</a>
-            <button @click.prevent="isOpen = true; mobileOpen = false" class="w-full text-left text-sm py-2 hover:text-amber-400 flex items-center justify-between"><span>Panier</span><span class="bg-amber-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center" x-text="totals.items">0</span></button>
+            
+            {{-- 🌓 Toggle Mode Sombre/Clair (Ajouté pour mobile) --}}
+            <button @click="toggle(); mobileOpen = false" class="w-full text-left text-sm py-2 flex items-center justify-between text-white/80 hover:text-white transition">
+                <span>Mode sombre / clair</span>
+                <span x-html="icon" class="ml-2"></span>
+            </button>
+
+            <button @click.prevent="isOpen = true; mobileOpen = false" class="w-full text-left text-sm py-2 hover:text-amber-400 flex items-center justify-between">
+                <span>Panier</span>
+                <span class="bg-amber-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center" x-text="totals.items">0</span>
+            </button>
+            
             @auth
                 @if(auth()->user()->is_admin)<a href="{{ url('/admin/commandes') }}" @click="navigateTo($event, '{{ url('/admin/commandes') }}'); mobileOpen = false" class="block text-sm py-2 text-rose-300 hover:text-rose-200">Admin Panel</a>@endif
                 <a href="{{ route('client.dashboard') }}" @click="navigateTo($event, '{{ route('client.dashboard') }}'); mobileOpen = false" class="block text-sm py-2 hover:text-amber-400">Mon compte</a>
