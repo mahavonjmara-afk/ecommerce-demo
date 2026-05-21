@@ -18,10 +18,13 @@ use Illuminate\Support\Facades\Route;
 // Page d'accueil
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
-// Page Produits avec Filtres & Recherche
+// Page Produits (Liste + Filtres)
 Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
+
+// Page Catégorie (Détail d'une catégorie)
+Route::get('/categories/{category}', [ProductController::class, 'show'])->name('categories.show');
 
 // API Recherche Instantanée (Header)
 Route::get('/api/products/search', [ProductController::class, 'search'])->name('api.products.search');
@@ -48,6 +51,7 @@ Route::middleware('web')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     
+    // Page de succès après commande
     Route::get('/commande/{order}/merci', function ($orderId) {
         return view('checkout.success', ['orderId' => $orderId]);
     })->name('checkout.success');
@@ -81,7 +85,7 @@ Route::middleware(['auth'])->prefix('mon-compte')->name('client.')->group(functi
 
 /*
 |--------------------------------------------------------------------------
-| Routes Admin - Requiert Auth + Admin
+| Routes Admin - Requiert Auth + Middleware Admin
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -108,6 +112,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // 🔥 REDIRECTION INTELLIGENTE POST-CONNEXION
+    // Si l'utilisateur va sur /dashboard, on le redirige vers son espace
     Route::get('/dashboard', function () {
         // Si Admin → Redirige vers /admin
         if (auth()->user()->is_admin) {
