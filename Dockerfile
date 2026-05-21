@@ -2,7 +2,7 @@ FROM php:8.2-cli
 
 WORKDIR /var/www/html
 
-# 1. Dépendances système & Extensions PHP
+# 1. Dépendances & Extensions PHP
 RUN apt-get update && apt-get install -y \
     git curl libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
     libzip-dev libxml2-dev libonig-dev unzip zip nodejs npm \
@@ -12,13 +12,12 @@ RUN apt-get update && apt-get install -y \
 
 # 2. Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV COMPOSER_MEMORY_LIMIT=-1
+ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
 
 # 3. Copie du projet
 COPY . .
 
-# 4. Installation & Build
+# 4. Installation & Build (Sans commandes Artisan pour éviter les erreurs d'env)
 RUN composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-reqs \
     && npm ci --no-audit --no-fund \
     && NODE_OPTIONS="--max-old-space-size=512" npm run build \
@@ -29,13 +28,10 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && touch storage/database.sqlite \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
-    
-# 🔥 AJOUTER CETTE LIGNE ICI : Remplir la BDD avec l'admin
-RUN php artisan db:seed --force
 
 EXPOSE 10000
 
-# 🔥 6. Démarrage : Migrations + Cache Clear + Serveur
+# 🔥 6. Démarrage : Migrations + Seeding + Serveur (Env vars disponibles ici !)
 CMD php artisan migrate --force \
-    && php artisan optimize:clear \
+    && php artisan db:seed --force \
     && php artisan serve --host=0.0.0.0 --port=10000
